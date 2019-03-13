@@ -1,4 +1,4 @@
-/* /pages/signin.js */ 
+/* /pages/signin.js */
 import React from "react";
 
 import defaultPage from "../hocs/defaultPage";
@@ -32,7 +32,7 @@ class SignIn extends React.Component {
   }
   componentDidMount() {
     if (this.props.isAuthenticated) {
-      Router.push("/"); // redirect if you're already logged in
+      Router.push("/dashboard"); // redirect if you're already logged in
     }
   }
 
@@ -49,7 +49,10 @@ class SignIn extends React.Component {
 
     this.setState({ loading: true });
 
-    strapiLogin(email, password).then(() => console.log(Cookies.get("user")));
+    strapiLogin(email, password).then(() => {
+      console.log(Cookies.get("user"))
+      Router.push("/dashboard"); // redirect if you're already logged in
+    });
   }
   render() {
     const { error } = this.state;
@@ -58,9 +61,6 @@ class SignIn extends React.Component {
         <Row>
           <Col sm="12" md={{ size: 5, offset: 3 }}>
             <div className="paper">
-              <div className="header">
-                <img src="https://strapi.io/assets/images/logo.png" />
-              </div>
               <section className="wrapper">
                 <div className="notification">{error}</div>
                 <Form>

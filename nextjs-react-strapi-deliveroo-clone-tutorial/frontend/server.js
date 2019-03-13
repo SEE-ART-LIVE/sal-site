@@ -18,6 +18,10 @@ app.prepare()
 			app.render(req, res, actualPage, queryParams)
 		})
 
+		server.get('/user/:query', (req, res) => {
+			return app.render(req, res, '/user', { query: req.params.query })
+		})
+
 		server.get('*', (req, res) => {
 			return handle(req, res)
 		})

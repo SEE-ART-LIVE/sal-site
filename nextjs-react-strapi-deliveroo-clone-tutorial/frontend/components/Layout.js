@@ -50,9 +50,11 @@ class Layout extends React.Component {
             {isAuthenticated ? (
               <>
                 <NavItem className="ml-auto">
-                  <span style={{ color: "white", marginRight: 30 }}>
-                    {this.props.loggedUser}
-                  </span>
+                  <Link href={'/user/' + this.props.loggedUser}>
+                    <a style={{ color: "white", marginRight: 30 }}>
+                      {this.props.loggedUser}
+                    </a>
+                  </Link>
                 </NavItem>
                 <NavItem>
                   <Link href="/">
@@ -63,42 +65,23 @@ class Layout extends React.Component {
                 </NavItem>
               </>
             ) : (
-              <>
-                <NavItem className="ml-auto">
-                  <Link href="/signin">
-                    <a className="nav-link">Sign In</a>
-                  </Link>
-                </NavItem>
+                <>
+                  <NavItem className="ml-auto">
+                    <Link href="/signin">
+                      <a className="nav-link">Sign In</a>
+                    </Link>
+                  </NavItem>
 
-                <NavItem>
-                  <Link href="/signup">
-                    <a className="nav-link"> Sign Up</a>
-                  </Link>
-                </NavItem>
-              </>
-            )}
+                  <NavItem>
+                    <Link href="/signup">
+                      <a className="nav-link"> Sign Up</a>
+                    </Link>
+                  </NavItem>
+                </>
+              )}
           </Nav>
         </header>
         <Container>{children}</Container>
-        {/* <footer className="footer">
-          {"Strapi footer"}
-          <style jsx>
-            {`
-              .footer {
-                position: absolute;
-                bottom: 0;
-                width: 100%;
-                height: 60px;
-                line-height: 60px;
-                background-color: #f5f5f5;
-              }
-              a:hover {
-                cursor: pointer;
-                color: yellow;
-              }
-            `}
-          </style>
-        </footer> */}
       </div>
     );
   }

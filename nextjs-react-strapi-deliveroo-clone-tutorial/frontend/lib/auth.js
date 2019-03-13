@@ -9,6 +9,17 @@ import Router from "next/router";
 const apiUrl = process.env.API_URL || "http://localhost:1337";
 const strapi = new Strapi(apiUrl);
 
+export const strapiCreateEntry = (contentTypePluralized, data) => {
+  if (!process.browser) {
+    return undefined;
+  }
+  console.log(data)
+  strapi.createEntry(contentTypePluralized, data).then(res => {
+    console.log(res);
+  });
+  return Promise.resolve();
+};
+
 export const strapiRegister = (username, email, password) => {
   if (!process.browser) {
     return undefined;
