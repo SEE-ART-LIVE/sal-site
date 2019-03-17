@@ -22,6 +22,14 @@ app.prepare()
 			return app.render(req, res, '/user', { query: req.params.query })
 		})
 
+		server.get('/location/:query', (req, res) => {
+			return app.render(req, res, '/location', { query: req.params.query })
+		})
+
+		server.get('/event/:query', (req, res) => {
+			return app.render(req, res, '/event', { query: req.params.query })
+		})
+
 		server.get('*', (req, res) => {
 			return handle(req, res)
 		})

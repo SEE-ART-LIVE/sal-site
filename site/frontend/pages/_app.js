@@ -42,6 +42,9 @@ class MyApp extends App {
             .card-columns {
               column-count: 3;
             }
+            Container {
+              margin-top: 3rem;
+            }
           `}
         </style>
       </Container>

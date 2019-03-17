@@ -82,7 +82,7 @@ class LocationForm extends React.Component {
               <h3>Location</h3>
             </div>
           </Col>
-          <Col sm="6" md="6">
+          <Col sm="12" md="12">
             <section className="wrapper">
               <div className="notification">{error}</div>
               <Form id="location-form" ref={ref => (this.locationForm = ref)}>

@@ -1,13 +1,9 @@
-/* /pages/user.js */
 import React from "react";
-// import LocationForm from "../components/LocationForm";
-import CurrentUserLocationsList from "../components/CurrentUserLocationsList";
-import CurrentUserEventsList from "../components/CurrentUserEventsList";
 import defaultPage from "../hocs/defaultPage";
-import axios from "axios";
+import EventForm from "../components/EventForm";
+import axios from 'axios'
 
-class User extends React.Component {
-  
+class Event extends React.Component {
   constructor(props) {
     super(props);
     //query state will be passed to RestaurantList for the filter query
@@ -30,13 +26,8 @@ class User extends React.Component {
   }
 
   render() {
-    return (
-      <div className="container-fluid">
-        <CurrentUserLocationsList user={this.state.user} />
-        <CurrentUserEventsList user={this.state.user} />
-      </div>
-    );
+    return <EventForm user={this.state.user} />;
   }
 }
 
-export default defaultPage(User);
+export default defaultPage(Event);
