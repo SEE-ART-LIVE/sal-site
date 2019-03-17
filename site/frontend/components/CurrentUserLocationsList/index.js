@@ -17,19 +17,22 @@ const CurrentUserLocationsList = (
   req
 ) => {
   if (error) return "Error loading locations";
-  //if locations are returned from the GraphQL query, run the filter query
-  //and set equal to variable locationsearch
+  // if locations are returned from the GraphQL query, run the filter query
+  // and set equal to variable locationsearch
   if (users && users.length) {
     //searchQuery
-    console.log(users[0].location.length)
-    let locations = users[0].location
+    console.log(users[0].location);
+    let locations = users[0].location;
+    /* 
     const searchQuery = locations.filter(query =>
       query.Name.toLowerCase().includes(search)
-    );
+    ); 
+    */
     if (locations.length != 0) {
       return (
-        <div>
-          <div className="h-100">
+      <div className="container-fluid">
+        <Row>
+          <Col sm="6" md="6">
             {locations.map(res => (
               <Card
                 style={{ width: "30%", margin: "0 10px" }}
@@ -52,7 +55,7 @@ const CurrentUserLocationsList = (
                 </div>
               </Card>
             ))}
-          </div>
+          </Col>
 
           <style jsx global>
             {`
@@ -71,7 +74,8 @@ const CurrentUserLocationsList = (
               }
             `}
           </style>
-        </div>
+        </Row>
+      </div>
       );
     } else {
       return <h1>No Locations Found</h1>;
@@ -81,23 +85,23 @@ const CurrentUserLocationsList = (
 };
 
 const query = gql`
-query users($id: ID!) {
-  users(where: { _id: $id }, limit: 1) {
-    _id
-    location {
+  query users($id: ID!) {
+    users(where: { _id: $id }, limit: 1) {
       _id
-      Name
-      Description
-      Address
-      City
-      State
-      Zipcode
-      Image {
-        url
+      location {
+        _id
+        Name
+        Description
+        Address
+        City
+        State
+        Zipcode
+        Image {
+          url
+        }
       }
     }
   }
-}
 `;
 
 CurrentUserLocationsList.getInitialProps = async ({ req }) => {
@@ -105,13 +109,12 @@ CurrentUserLocationsList.getInitialProps = async ({ req }) => {
   const res = await fetch("https://api.github.com/repos/zeit/next.js");
   const json = await res.json();
   return { stars: json.stargazers_count };
-
 };
 // const userid = this.props.user;
 // The `graphql` wrapper executes a GraphQL query and makes the results
 // available on the `data` prop of the wrapped component (RestaurantList)
 export default graphql(query, {
-  options: (props) => ({ variables: { id: props.user } }),
+  options: props => ({ variables: { id: props.user } }),
   props: ({ data }) => ({
     data
   })

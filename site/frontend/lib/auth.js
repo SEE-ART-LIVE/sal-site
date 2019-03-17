@@ -37,6 +37,7 @@ export const strapiLogin = (email, password) => {
   }
   // Get a token
   strapi.login(email, password).then(res => {
+    console.log(res)
     setToken(res);
   });
   return Promise.resolve();
@@ -50,7 +51,8 @@ export const setToken = token => {
   Cookies.set("jwt", token.jwt);
 
   if (Cookies.get("username")) {
-    Router.push("/");
+    // console.log(Cookies.get("username"))
+    Router.push(`/user/${Cookies.get("username")}`);
   }
 };
 

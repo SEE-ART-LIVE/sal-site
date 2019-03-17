@@ -30,9 +30,10 @@ class SignIn extends React.Component {
       error: ""
     };
   }
+
   componentDidMount() {
     if (this.props.isAuthenticated) {
-      Router.push("/dashboard"); // redirect if you're already logged in
+      Router.push(`/user/` + this.props.loggedUser); // redirect if you're already logged in
     }
   }
 
@@ -41,6 +42,7 @@ class SignIn extends React.Component {
     data[propertyName] = event.target.value;
     this.setState({ data });
   }
+
   onSubmit() {
     const {
       data: { email, username, password }
@@ -51,7 +53,6 @@ class SignIn extends React.Component {
 
     strapiLogin(email, password).then(() => {
       console.log(Cookies.get("user"))
-      Router.push("/dashboard"); // redirect if you're already logged in
     });
   }
   render() {
@@ -138,4 +139,4 @@ class SignIn extends React.Component {
     );
   }
 }
-export default SignIn;
+export default defaultPage(SignIn);
