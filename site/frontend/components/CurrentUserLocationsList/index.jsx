@@ -67,8 +67,8 @@ const CurrentUserLocationsList = (
                       <td>{res.City}</td>
                       <td>
                         <Link
-                          as={`/location/${users[0]._id}/${res.Name}`}
-                          href={`/location?id=${res._id}&user=${users[0]._id}`}
+                          as={`/location`}
+                          href={`/location?locationid=${res._id}&userid=${users[0]._id}`}
                         >
                           <a className="btn btn-primary">Edit</a>
                         </Link>
