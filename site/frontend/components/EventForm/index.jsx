@@ -1,22 +1,17 @@
-/* /pages/restaurants.js */
-import React from "react";
-import { compose } from "recompose";
-import { states } from "../../lists/usStates";
-import Router from "next/router";
-import LocationsList from "../../lists/currentUserLocations"
-import axios from "axios";
+/* components/EventForm/index.js */
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+import { withRouter, Router, Link } from 'next/router'
 import {
-  Container,
-  Row,
-  Col,
-  Button,
   Form,
   FormGroup,
   Label,
   Input,
-  FormText
+  Alert,
+  Row,
+  Col,
+  Button
 } from "reactstrap";
-import defaultPage from "../../hocs/defaultPage";
 
 class EventForm extends React.Component {
   constructor(props) {
@@ -71,114 +66,171 @@ class EventForm extends React.Component {
     document.getElementById("event-form").reset();
   }
   render() {
-    const { error } = this.state;
-    return (
-      <div className="container-fluid">
-        <Row>
-          <Col sm="12" md="12">
-            <div className="header">
-              <h3>Location</h3>
-            </div>
-          </Col>
-          <Col sm="12" md="12">
-            <section className="wrapper">
-              <div className="notification">{error}</div>
-              <Form id="event-form" ref={ref => (this.EventForm = ref)}>
-                <FormGroup>
-                  <Label>Name:</Label>
-                  <Input
-                    onChange={this.onChange.bind(this, "name")}
-                    type="text"
-                    name="name"
-                    style={{ height: 50, fontSize: "1.2em" }}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label>Description:</Label>
-                  <Input
-                    onChange={this.onChange.bind(this, "description")}
-                    type="textarea"
-                    name="username"
-                    style={{ height: 250, fontSize: "1.2em" }}
-                  />
-                </FormGroup>
-
-                <LocationsList user={this.props.user} bind={this.onChange.bind(this, "state")}/>
-
-                <FormGroup>
-                  <Label>Address:</Label>
-                  <Input
-                    onChange={this.onChange.bind(this, "address")}
-                    type="text"
-                    name="address"
-                    style={{ height: 50, fontSize: "1.2em" }}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label>City:</Label>
-                  <Input
-                    onChange={this.onChange.bind(this, "city")}
-                    type="text"
-                    name="city"
-                    style={{ height: 50, fontSize: "1.2em" }}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <Label>State:</Label>
-                  <Input
-                    onChange={this.onChange.bind(this, "state")}
-                    type="select"
-                    name="state"
-                    style={{ height: 50, fontSize: "1.2em" }}
-                  >
-                    {Object.entries(states[0]).map((s, i) => {
-                      return (
-                        <option key={i} value={s[0]}>
-                          {s[1]}
+    console.log(this.props);
+    const {
+      data: { loading, error, users },
+      search
+    } = this.props;
+    this.props.refetch;
+    if (error)
+      return (
+        <FormGroup>
+          <Label>Locations:</Label>
+          <Alert color="danger">
+            Error Loading Locations, Please reload and try again.
+          </Alert>
+        </FormGroup>
+      );
+    if (users && users.length) {
+      let locations = users[0].location;
+      if (locations.length != 0) {
+        return (
+          <Row>
+            <Col sm="12" md="12">
+              <div className="header">
+                <h3>Location</h3>
+              </div>
+            </Col>
+            <Col sm="12" md="12">
+              <section className="wrapper">
+                <div className="notification">{error}</div>
+                <Form id="event-form" ref={ref => (this.EventForm = ref)}>
+                  <FormGroup>
+                    <Label>Name:</Label>
+                    <Input
+                      onChange={this.onChange.bind(this, "name")}
+                      type="text"
+                      name="name"
+                      style={{ height: 50, fontSize: "1.2em" }}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Description:</Label>
+                    <Input
+                      onChange={this.onChange.bind(this, "description")}
+                      type="textarea"
+                      name="username"
+                      style={{ height: 250, fontSize: "1.2em" }}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Locations:</Label>
+                    <Input
+                      type="select"
+                      name="location"
+                      style={{ height: 50, fontSize: "1.2em" }}
+                    >
+                      {locations.map(res => (
+                        <option key={res._id} value={res.Address}>
+                          {res.Address}
                         </option>
-                      );
-                    })}
-                  </Input>
-                </FormGroup>
-                <FormGroup>
-                  <Label>Zipcode:</Label>
-                  <Input
-                    onChange={this.onChange.bind(this, "zipcode")}
-                    type="text"
-                    name="zipcode"
-                    style={{ height: 50, fontSize: "1.2em" }}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <span>
-                    <a href="">
-                      <small>Forgot Password?</small>
-                    </a>
-                  </span>
-                  <Button
-                    style={{ float: "right", width: 120 }}
-                    color="primary"
-                    onKeyPress={this.onSubmit.bind(this)}
-                    onClick={this.onSubmit.bind(this)}
-                  >
-                    Submit
-                  </Button>
-                </FormGroup>
-              </Form>
-            </section>
-          </Col>
-        </Row>
-        <style jsx>
-          {`
-            .search {
-              margin: 20px;
-              width: 500px;
-            }
-          `}
-        </style>
-      </div>
+                      ))}
+                    </Input>
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Address:</Label>
+                    <Input
+                      onChange={this.onChange.bind(this, "address")}
+                      type="text"
+                      name="address"
+                      style={{ height: 50, fontSize: "1.2em" }}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>City:</Label>
+                    <Input
+                      onChange={this.onChange.bind(this, "city")}
+                      type="text"
+                      name="city"
+                      style={{ height: 50, fontSize: "1.2em" }}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label>Zipcode:</Label>
+                    <Input
+                      onChange={this.onChange.bind(this, "zipcode")}
+                      type="text"
+                      name="zipcode"
+                      style={{ height: 50, fontSize: "1.2em" }}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <span>
+                      <a href="">
+                        <small>Forgot Password?</small>
+                      </a>
+                    </span>
+                    <Button
+                      style={{ float: "right", width: 120 }}
+                      color="primary"
+                      onKeyPress={this.onSubmit.bind(this)}
+                      onClick={this.onSubmit.bind(this)}
+                    >
+                      Submit
+                    </Button>
+                  </FormGroup>
+                </Form>
+              </section>
+            </Col>
+          </Row>
+        );
+      } else {
+        return (
+          <FormGroup>
+            <Label>Locations:</Label>
+            <Alert color="warning">
+              Error Loading Locations, Please reload and try again.
+            </Alert>
+          </FormGroup>
+        );
+      }
+    }
+    return (
+      <FormGroup>
+        <p>Loading</p>
+      </FormGroup>
     );
   }
 }
 
-export default compose(defaultPage)(EventForm);
+const query = gql`
+  query users($id: ID!) {
+    users(where: { _id: $id }, limit: 1) {
+      _id
+      location {
+        _id
+        Name
+        Description
+        Address
+        City
+        State
+        Zipcode
+        Image {
+          url
+        }
+      }
+    }
+  }
+`;
+
+EventForm.getInitialProps = async ({ req }) => {};
+
+EventForm.componentDidMount = props => {
+  console.log(`props`);
+};
+
+// const userid = this.props.user;
+// The `graphql` wrapper executes a GraphQL query and makes the results
+// available on the `data` prop of the wrapped component (RestaurantList)
+const ComponentWithMutation = graphql(query, {
+  options: ({ router: { query } }) => ({
+    variables: {
+      id: query.userid
+    }
+  }),
+  props: ({ data }) => ({
+    data
+  })
+})(EventForm);
+
+export default withRouter(ComponentWithMutation);

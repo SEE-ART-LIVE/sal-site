@@ -22,7 +22,7 @@ const CurrentUserEventsList = (
   // and set equal to variable locationsearch
   if (users && users.length) {
     //searchQuery
-    console.log(users[0].event);
+    console.log(users[0]);
     let events = users[0].event !== null ? users[0].event : [];
     /* 
     const searchQuery = events.filter(query =>
@@ -90,7 +90,7 @@ const CurrentUserEventsList = (
           </Row>
           <Row>
             <Col sm="12" md="12">
-              <Link as={`/event`} href={`/event`}>
+              <Link as={`/event/${users[0]._id}`} href={`/event/${users[0]._id}`}>
                 <a className="btn btn-primary">Add Event</a>
               </Link>
             </Col>
@@ -112,7 +112,7 @@ const CurrentUserEventsList = (
           <div className="py-2">
             <Row>
               <Col sm="12" md="12">
-                <Link as={`/event`} href={`/event`}>
+                <Link as={`/event/${users[0]._id}`} href={`/event/${users[0]._id}`}>
                   <a className="btn btn-primary">Add Event</a>
                 </Link>
               </Col>

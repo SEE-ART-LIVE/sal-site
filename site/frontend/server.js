@@ -4,7 +4,9 @@ const express = require('express')
 const next = require('next')
 
 const dev = process.env.NODE_ENV !== 'production'
-const app = next({ dev })
+const app = next({
+	dev
+})
 const handle = app.getRequestHandler()
 
 app.prepare()
@@ -13,21 +15,43 @@ app.prepare()
 
 		server.get('/restaurants/:id', (req, res) => {
 			const actualPage = '/restaurants'
-			const queryParams = { id: req.params.id }
+			const queryParams = {
+				id: req.params.id
+			}
 			console.dir("req.params.id = " + JSON.stringify(req.params.id))
 			app.render(req, res, actualPage, queryParams)
 		})
 
 		server.get('/user/:query', (req, res) => {
-			return app.render(req, res, '/user', { query: req.params.query })
+			return app.render(req, res, '/user', {
+				query: req.params.query
+			})
 		})
 
-		server.get('/location/:query', (req, res) => {
-			return app.render(req, res, '/location', { query: req.params.query })
+		server.get('/location/:userid/:locationid', (req, res) => {
+			return app.render(req, res, '/location', {
+				userid: req.params.userid,
+				locationid: req.params.locationid
+			})
 		})
 
-		server.get('/event/:query', (req, res) => {
-			return app.render(req, res, '/event', { query: req.params.query })
+		server.get('/location/:userid', (req, res) => {
+			return app.render(req, res, '/location', {
+				userid: req.params.userid
+			})
+		})
+
+		server.get('/event/:userid', (req, res) => {
+			return app.render(req, res, '/event', {
+				userid: req.params.userid
+			})
+		})
+
+		server.get('/event/:userid/:eventid', (req, res) => {
+			return app.render(req, res, '/event', {
+				userid: req.params.userid,
+				eventid: req.params.eventid
+			})
 		})
 
 		server.get('*', (req, res) => {
