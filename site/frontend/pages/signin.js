@@ -52,7 +52,7 @@ class SignIn extends React.Component {
     this.setState({ loading: true });
 
     strapiLogin(email, password).then(() => {
-      console.log(Cookies.get("user"))
+      // console.log(Cookies.get("user"))
     });
   }
   render() {

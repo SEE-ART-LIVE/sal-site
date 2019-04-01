@@ -22,7 +22,7 @@ const CurrentUserEventsList = (
   // and set equal to variable locationsearch
   if (users && users.length) {
     //searchQuery
-    console.log(users[0]);
+
     let events = users[0].event !== null ? users[0].event : [];
     /* 
     const searchQuery = events.filter(query =>
