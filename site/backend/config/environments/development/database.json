@@ -6,16 +6,12 @@
       "settings": {
         "client": "mongo",
         "host": "127.0.0.1",
-        "srv": false,
         "port": 27017,
-        "database": "backend",
+        "database": "db",
         "username": "",
         "password": ""
       },
-      "options": {
-        "authenticationDatabase": "",
-        "ssl": false
-      }
+      "options": {}
     }
   }
 }

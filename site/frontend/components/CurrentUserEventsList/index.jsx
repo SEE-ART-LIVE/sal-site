@@ -29,8 +29,6 @@ const CurrentUserEventsList = (
       query.Name.toLowerCase().includes(search)
     ); 
     */
-    console.log(events);
-
     if (events.length != 0) {
       return (
         <div className="py-5">
@@ -58,9 +56,9 @@ const CurrentUserEventsList = (
                       <td>{res.Location.Name}</td>
                       <td>{res.Date}</td>
                       <td>
-                        <Link
-                          as={`/event/${res._id}`}
-                          href={`/event?id=${res._id}`}
+                      <Link
+                          as={`/location?eventid=${res._id}&userid=${users[0]._id}`}
+                          href={`/location?eventid=${res._id}&userid=${users[0]._id}`}
                         >
                           <a className="btn btn-primary">Edit</a>
                         </Link>
@@ -90,7 +88,7 @@ const CurrentUserEventsList = (
           </Row>
           <Row>
             <Col sm="12" md="12">
-              <Link as={`/event/${users[0]._id}`} href={`/event/${users[0]._id}`}>
+              <Link as={`/event?userid=${users[0]._id}`} href={`/event?userid=${users[0]._id}`}>
                 <a className="btn btn-primary">Add Event</a>
               </Link>
             </Col>
@@ -112,7 +110,7 @@ const CurrentUserEventsList = (
           <div className="py-2">
             <Row>
               <Col sm="12" md="12">
-                <Link as={`/event/${users[0]._id}`} href={`/event/${users[0]._id}`}>
+                <Link as={`/event?userid=${users[0]._id}`} href={`/event?userid=${users[0]._id}`}>
                   <a className="btn btn-primary">Add Event</a>
                 </Link>
               </Col>
@@ -156,6 +154,7 @@ const query = gql`
         }
         Image {
           url
+          name
         }
       }
     }

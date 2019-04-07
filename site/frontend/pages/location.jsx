@@ -26,7 +26,7 @@ class Location extends React.Component {
   }
 
   render() {
-    return <LocationForm user={this.state.user} />;
+    return <LocationForm user={this.state.user} loggedUser={this.props.loggedUser}/>;
   }
 }
 

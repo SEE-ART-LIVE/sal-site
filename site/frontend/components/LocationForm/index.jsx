@@ -13,7 +13,7 @@ class LocationForm extends React.Component {
     const { data: { loading, error, users } } = this.props;
     if (this.props.router.query.locationid === undefined) {
       return (
-         <Lform />
+         <Lform loggedUser={this.props.loggedUser}/>
       );
     }
     if (error)
@@ -27,11 +27,11 @@ class LocationForm extends React.Component {
       })
       if (locations.length !== 0) {
         return (
-          <Lform location={locations} />
+          <Lform location={locations} loggedUser={this.props.loggedUser}/>
         );
       } else {
         return (
-          <Lform />
+          <Lform loggedUser={this.props.loggedUser}/>
         );
       }
     }
@@ -58,13 +58,13 @@ const query = gql`
         Zipcode
         Image {
           url
+          name
         }
       }
     }
   }
 `;
 
-// const userid = this.props.user;
 // The `graphql` wrapper executes a GraphQL query and makes the results
 // available on the `data` prop of the wrapped component (RestaurantList)
 const ComponentWithMutation = graphql(query, {
