@@ -1,25 +1,21 @@
 /* components/EventForm/form.js */
-import { states } from "../../lists/usStates";
-import { countries } from "../../lists/worldCountries";
+// import { states } from "../../lists/usStates";
+// import { countries } from "../../lists/worldCountries";
 import { withRouter } from "next/router";
 import axios from "axios";
 import {
-  AvForm,
-  AvField,
-  AvGroup,
-  AvInput,
-  AvFeedback,
-  AvRadioGroup,
-  AvRadio,
-  AvCheckboxGroup,
-  AvCheckbox
+  AvForm, AvField, AvGroup, AvInput, AvFeedback, AvRadioGroup, AvRadio, AvCheckboxGroup, AvCheckbox
 } from "availity-reactstrap-validation";
-import { Form, FormGroup, Label, Input, Row, Col, Button } from "reactstrap";
-import Globalize from 'globalize';
-import globalizeLocalizer from 'react-widgets-globalize';
+import {
+  Form, FormGroup, Label, Input, Row, Col, Button
+} from "reactstrap";
+// Add the css styles...
+import 'react-widgets/dist/css/react-widgets.css';
+import Moment from 'moment'
+import momentLocalizer from 'react-widgets-moment';
 import DateTimePicker from 'react-widgets/lib/DateTimePicker';
-Globalize.locale('en')
-globalizeLocalizer()
+Moment.locale('en');
+momentLocalizer();
 
 class EForm extends React.Component {
   constructor(props) {
@@ -53,17 +49,17 @@ class EForm extends React.Component {
     this.setState({ data });
   }
   async deletePost() {
-    if (this.props.event) {
-      await axios.delete(`http://localhost:1337/events/`, {
-        _id: this.props.router.query.eventid
-      });
-      this.props.router.push(`/user/${this.props.loggedUser}`);
-    }
+    /*     if (this.props.event) {
+          await axios.delete(`http://localhost:1337/events/`, {
+            _id: this.props.router.query.eventid
+          });
+          this.props.router.push(`/user/${this.props.loggedUser}`);
+        } */
   }
   async readURL(input) {
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         document.getElementById("preview").setAttribute("src", e.target.result);
       };
       reader.readAsDataURL(input.files[0]);
@@ -172,7 +168,7 @@ class EForm extends React.Component {
                 <AvGroup>
                   <Label>Date:</Label>
                   <DateTimePicker
-                    onChange={this.state.data.date}
+                    onChange={this.onChange.bind(this, "date")}
                     defaultValue={new Date()}
                     data={["orange", "red", "blue", "purple"]}
                     name="date"
@@ -246,18 +242,6 @@ class EForm extends React.Component {
             </section>
           </Col>
         </Row>
-        <style jsx>
-          {`
-            img {
-              width: 100%;
-              height: auto;
-            }
-            .search {
-              margin: 20px;
-              width: 500px;
-            }
-          `}
-        </style>
       </div>
     );
   }
