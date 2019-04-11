@@ -1,7 +1,9 @@
 /* /pages/_app.js */
 
 import Layout from "../components/Layout";
-import withData from "../lib/apollo";
+// import withData from "../lib/apollo";
+import withApolloClient from '../lib/with-apollo-client'
+import { ApolloProvider } from 'react-apollo'
 import App, { Container } from "next/app";
 import React from "react";
 
@@ -15,14 +17,16 @@ class MyApp extends App {
   }
 
   render() {
-    const { Component, pageProps, isAuthenticated, ctx } = this.props;
+    const { Component, pageProps, isAuthenticated, ctx, apolloClient } = this.props;
     return (
       <Container>
+        <ApolloProvider client={apolloClient}>
           <Layout isAuthenticated={isAuthenticated} {...pageProps}>
             <Component {...pageProps} />
           </Layout>
+        </ApolloProvider>
       </Container>
     );
   }
 }
-export default withData(MyApp);
+export default withApolloClient(MyApp);

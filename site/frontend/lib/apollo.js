@@ -5,6 +5,7 @@ import { withData } from "next-apollo";
 
 const config = {
   link: new HttpLink({
+    credentials: 'same-origin',
     uri: "http://localhost:1337/graphql", // Server URL (must be absolute)
   })
 };

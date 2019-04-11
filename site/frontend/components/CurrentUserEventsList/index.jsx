@@ -2,7 +2,7 @@
 import gql from "graphql-tag";
 import Link from "next/link";
 import { graphql } from "react-apollo";
-import { Card, CardBody, CardText, CardTitle, Col, Row } from "reactstrap";
+import { Card, CardBody, CardText, CardTitle, Col, Row, Table } from "reactstrap";
 
 const CurrentUserEventsList = (
   { data: { loading, error, users }, search },
@@ -23,7 +23,9 @@ const CurrentUserEventsList = (
   if (users && users.length) {
     //searchQuery
 
-    let events = users[0].event !== null ? users[0].event : [];
+    let events = [users[0].event];
+
+    console.log(events)
     /* 
     const searchQuery = events.filter(query =>
       query.Name.toLowerCase().includes(search)
@@ -49,11 +51,11 @@ const CurrentUserEventsList = (
                   </tr>
                 </thead>
                 <tbody>
-                  {events.map(res => (
+  {events.map(res => (
                     <tr key={res._id}>
-                      <td>{res.Name}</td>
+                      <td>{res.Title}</td>
                       <td>{res.Description}</td>
-                      <td>{res.Location.Name}</td>
+                      <td>{res.location.Name}</td>
                       <td>{res.Date}</td>
                       <td>
                       <Link
@@ -64,7 +66,7 @@ const CurrentUserEventsList = (
                         </Link>
                       </td>
                     </tr>
-                  ))}
+                  ))} 
                 </tbody>
               </Table>
               <style jsx global>
