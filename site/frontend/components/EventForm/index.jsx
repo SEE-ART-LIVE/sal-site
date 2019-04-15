@@ -10,10 +10,6 @@ class EventForm extends React.Component {
     const {
       data: { loading, error, users }
     } = this.props;
-    console.log(error)
-/*     if (this.props.router.query.eventid === undefined) {
-      return <Eform loggedUser={this.props.loggedUser} />;
-    } */
     if (error)
       return (
         <FormGroup>
@@ -25,44 +21,38 @@ class EventForm extends React.Component {
     if (users && users.length) {
       let locations = users[0].location;
       let events = users[0].events;
-      console.log(locations, events)
-      if (location !== undefined) {
-      if (locations.length != 0) {
-        return (
-          <Eform
-            location={locations}
-            loggedUser={this.props.loggedUser}
-          />
-        );
-      } else if (locations.length != 0 && events.length != 0) {
-        return (
-          <Eform
-            event={events}
-            location={locations}
-            loggedUser={this.props.loggedUser}
-          />
-        );
-      } else {
-        return (
-          <FormGroup>
-            <Alert color="danger">
-              Please add some locations.{" "}
-              <Link as={`/location`} href={`/location`}>
-                <a className="btn btn-primary">Add Location</a>
-              </Link>
-            </Alert>
-          </FormGroup>
-        );
-        
-        {
-          /* <Eform loggedUser={this.props.loggedUser} />; */
+      if (locations !== undefined) {
+        if (locations.length != 0) {
+          return (
+            <Eform location={locations} loggedUser={this.props.loggedUser} />
+          );
+        } else if (locations.length != 0 && events.length != 0) {
+          return (
+            <Eform
+              event={events}
+              location={locations}
+              loggedUser={this.props.loggedUser}
+            />
+          );
+        } else {
+          return (
+            <FormGroup>
+              <Alert color="danger">
+                Please add some locations.{" "}
+                <Link as={`/location`} href={`/location`}>
+                  <a className="btn btn-primary">Add Location</a>
+                </Link>
+              </Alert>
+            </FormGroup>
+          );
+
+          {
+            /* <Eform loggedUser={this.props.loggedUser} />; */
+          }
         }
+      } else {
+        return <p>something went right...</p>;
       }
-    } else {
-      return (
-        <p>something went right...</p>
-      );
-    }
     }
     return (
       <FormGroup>

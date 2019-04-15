@@ -47,6 +47,7 @@ export const setToken = token => {
   if (!process.browser) {
     return;
   }
+  console.log('token: ' + token)
   Cookies.set("username", token.user.username);
   Cookies.set("jwt", token.jwt);
 
@@ -73,7 +74,6 @@ export const getUserFromServerCookie = req => {
   if (!req.headers.cookie || "") {
     return undefined;
   }
-
   let username = req.headers.cookie
     .split(";")
     .find(user => user.trim().startsWith("username="));
