@@ -1,22 +1,35 @@
-
 import gql from "graphql-tag";
 import Link from "next/link";
 import { graphql } from "react-apollo";
 import { withRouter } from "next/router";
-import {
-  Col,
-  Row,
-  Table
-} from "reactstrap";
+import { Col, Row, Table } from "reactstrap";
+import axios from "axios";
 
 class CurrentUserEventsList extends React.Component {
-  async componentWillMount () {
-    console.log(this.props)
+  constructor(props) {
+    super(props);
+    this.state = {
+      "userid": null
+    };
   }
 
-  render () {
-    const { data: { loading, error, users }, search } = this.props;
-      if (error)
+  async componentWillMount() {
+    const response = await axios.get("http://localhost:1337/users/me");
+    const userId = await response.data._id;
+    this.setState({ userid : userId })
+    console.log(this.state)
+  }
+
+  render() {
+    return (
+     <div> {this.state.userid} </div>
+    );
+/*     const {
+      data: { loading, error, users },
+      search
+    } = this.props;
+    console.log(this.props, this.state)
+    if (error)
       return (
         <div className="py-5">
           <Row>
@@ -28,7 +41,7 @@ class CurrentUserEventsList extends React.Component {
       );
     if (users && users.length) {
       let events = users[0] !== null ? users[0].event : [];
-      events = events !== null ? events : []
+      events = events !== null ? events : [];
       if (events.length != 0) {
         return (
           <div className="py-5">
@@ -100,16 +113,6 @@ class CurrentUserEventsList extends React.Component {
                 </Link>
               </Col>
             </Row>
-            <Row>
-              <Col sm="12" md="12">
-                <Link
-                  as={`/event?userid=${users[0]._id}`}
-                  href={`/event?userid=${users[0]._id}`}
-                >
-                  <a className="btn btn-primary">Add Event</a>
-                </Link>
-              </Col>
-            </Row> cat 
           </div>
         );
       } else {
@@ -148,7 +151,7 @@ class CurrentUserEventsList extends React.Component {
         </Row>
       </div>
     );
-  };
+  } */
 };
 
 const query = gql`
@@ -181,13 +184,11 @@ const query = gql`
   }
 `;
 
-// The `graphql` wrapper executes a GraphQL query and makes the results
-// available on the `data` prop of the wrapped component (RestaurantList)
 export const componentQuery = graphql(query, {
-  options: props => ({ variables: { id: props.user } }),
+  options: state => ({ variables: { id: state.userid } }),
   props: ({ data }) => ({
     data
   })
 })(CurrentUserEventsList);
 
-export default withRouter(componentQuery)
+export default withRouter(CurrentUserEventsList);

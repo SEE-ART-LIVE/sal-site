@@ -13,8 +13,7 @@ import {
   Form,
   FormGroup,
   Label,
-  Input,
-  FormText
+  Input
 } from "reactstrap";
 import Cookies from "js-cookie";
 
