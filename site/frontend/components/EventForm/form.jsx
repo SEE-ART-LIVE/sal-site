@@ -4,18 +4,15 @@
 import { withRouter } from "next/router";
 import axios from "axios";
 import {
-  AvForm, AvField, AvGroup, AvInput, AvFeedback, AvRadioGroup, AvRadio, AvCheckboxGroup, AvCheckbox
+  AvForm,
+  AvField,
+  AvGroup,
+  AvInput
 } from "availity-reactstrap-validation";
-import {
-  Form, FormGroup, Label, Input, Row, Col, Button
-} from "reactstrap";
-// Add the css styles...
-import 'react-widgets/dist/css/react-widgets.css';
-import Moment from 'moment'
-import momentLocalizer from 'react-widgets-moment';
-import DateTimePicker from 'react-widgets/lib/DateTimePicker';
-Moment.locale('en');
-momentLocalizer();
+import { Label, Input, Row, Col, Button } from "reactstrap";
+import css from "react-datepicker/dist/react-datepicker.min.css";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.min.css";
 
 class EForm extends React.Component {
   constructor(props) {
@@ -24,6 +21,7 @@ class EForm extends React.Component {
     //query state will be passed to RestaurantList for the filter query
     this.state = {
       query: "",
+      startDate: new Date(),
       data: {
         title: "",
         date: "",
@@ -59,7 +57,7 @@ class EForm extends React.Component {
   async readURL(input) {
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-      reader.onload = function (e) {
+      reader.onload = function(e) {
         document.getElementById("preview").setAttribute("src", e.target.result);
       };
       reader.readAsDataURL(input.files[0]);
@@ -69,8 +67,7 @@ class EForm extends React.Component {
     if (errors.length === 0) {
       const { data, file } = this.state;
       this.setState({ loading: true });
-      const response = await axios.get("http://localhost:1337/users/me");
-      const userId = await response.data._id;
+      const userId = this.props.loggedId;
       const formData = new FormData();
 
       if (this.props.event) {
@@ -127,6 +124,7 @@ class EForm extends React.Component {
     }
   }
   render() {
+    console.log(css)
     return (
       <div className="container-fluid">
         <Row>
@@ -167,14 +165,24 @@ class EForm extends React.Component {
                 </AvGroup>
                 <AvGroup>
                   <Label>Date:</Label>
-                  <DateTimePicker
+
+                  <DatePicker
+                    onChange={this.onChange.bind(this, "date")}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    dateFormat="MMMM d, yyyy h:mm aa"
+                    timeCaption="time"
+                  />
+
+                  {/*                   <DateTimePicker
                     onChange={this.onChange.bind(this, "date")}
                     defaultValue={new Date()}
                     data={["orange", "red", "blue", "purple"]}
                     name="date"
                     style={{ height: 50, fontSize: "1.2em" }}
                     required
-                  />
+                  /> */}
                 </AvGroup>
                 <AvGroup>
                   <Label>Location:</Label>

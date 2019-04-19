@@ -30,8 +30,8 @@ const CurrentUserLocationsList = (
   // if locations are returned from the GraphQL query, run the filter query
   // and set equal to variable locationsearch
   if (users && users.length) {
-    //searchQuery
-    console.log(users[0].location);
+    // searchQuery
+    // console.log(users[0].location);
     let locations = users[0].location;
     /* 
     const searchQuery = locations.filter(query =>
@@ -159,13 +159,6 @@ const query = gql`
   }
 `;
 
-CurrentUserLocationsList.getInitialProps = async ({ req }) => {
-  let userid = this.props.user;
-  const res = await fetch("https://api.github.com/repos/zeit/next.js");
-  const json = await res.json();
-  return { stars: json.stargazers_count };
-};
-// const userid = this.props.user;
 // The `graphql` wrapper executes a GraphQL query and makes the results
 // available on the `data` prop of the wrapped component (RestaurantList)
 export default graphql(query, {

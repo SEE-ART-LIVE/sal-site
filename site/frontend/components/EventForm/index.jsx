@@ -6,6 +6,9 @@ import Eform from "./form";
 import { FormGroup, Alert } from "reactstrap";
 
 class EventForm extends React.Component {
+  async componentWillMount () {
+   // console.log(`eventForm.js`)
+  }
   render() {
     const {
       data: { loading, error, users }
@@ -24,7 +27,11 @@ class EventForm extends React.Component {
       if (locations !== undefined) {
         if (locations.length != 0) {
           return (
-            <Eform location={locations} loggedUser={this.props.loggedUser} />
+            <Eform 
+              location={locations} 
+              loggedUser={this.props.loggedUser} 
+              loggedId={this.props.loggedId} 
+            />
           );
         } else if (locations.length != 0 && events.length != 0) {
           return (
@@ -32,6 +39,7 @@ class EventForm extends React.Component {
               event={events}
               location={locations}
               loggedUser={this.props.loggedUser}
+              loggedId={this.props.loggedId}
             />
           );
         } else {
@@ -45,10 +53,6 @@ class EventForm extends React.Component {
               </Alert>
             </FormGroup>
           );
-
-          {
-            /* <Eform loggedUser={this.props.loggedUser} />; */
-          }
         }
       } else {
         return <p>something went right...</p>;

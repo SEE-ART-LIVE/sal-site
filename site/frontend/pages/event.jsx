@@ -15,10 +15,11 @@ class Event extends React.Component {
     };
   }
 
+  async componentWillMount () {
+    // console.log(`event.js`)
+  }
+
   async componentDidMount() {
-    const response = await axios.get("http://localhost:1337/users/me");
-    const userId = await response.data._id;
-    this.setState({ user: userId });
     const { isAuthenticated } = this.props;
     if (!isAuthenticated) {
       Router.push("/");
@@ -26,7 +27,7 @@ class Event extends React.Component {
   }
 
   render() {
-    return <EventForm user={this.state.user} />;
+    return <EventForm user={this.props.loggedId} />;
   }
 }
 

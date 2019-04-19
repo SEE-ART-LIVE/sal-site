@@ -20,9 +20,6 @@ class User extends React.Component {
   }
 
   async componentDidMount() {
-    const response = await axios.get("http://localhost:1337/users/me");
-    const userId = await response.data._id;
-    this.setState({ user: userId });
     const { isAuthenticated } = this.props;
     if (!isAuthenticated) {
       Router.push("/");
@@ -32,8 +29,8 @@ class User extends React.Component {
   render() {
     return (
       <div className="container-fluid">
-        <CurrentUserLocationsList user={this.state.user} />
-        <CurrentUserEventsList user={this.state.user} />
+        <CurrentUserLocationsList user={this.props.loggedId} />
+        <CurrentUserEventsList user={this.props.loggedId} />
       </div>
     );
   }

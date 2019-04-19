@@ -16,9 +16,6 @@ class Location extends React.Component {
   }
 
   async componentDidMount() {
-    const response = await axios.get("http://localhost:1337/users/me");
-    const userId = await response.data._id;
-    this.setState({ user: userId });
     const { isAuthenticated } = this.props;
     if (!isAuthenticated) {
       Router.push("/");
@@ -26,7 +23,7 @@ class Location extends React.Component {
   }
 
   render() {
-    return <LocationForm user={this.state.user} loggedUser={this.props.loggedUser}/>;
+    return <LocationForm user={this.props.loggedId} loggedUser={this.props.loggedUser}/>;
   }
 }
 

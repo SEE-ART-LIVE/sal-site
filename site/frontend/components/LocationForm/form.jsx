@@ -76,8 +76,7 @@ class LForm extends React.Component {
     if (errors.length === 0) {
       const { data, file } = this.state;
       this.setState({ loading: true });
-      const response = await axios.get("http://localhost:1337/users/me");
-      const userId = await response.data._id;
+      const userId = this.props.loggedId;
       const formData = new FormData();
 
       if (this.props.location) {

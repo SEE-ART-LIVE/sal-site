@@ -94,11 +94,7 @@ const query = gql`
     }
   }
 `;
-EventList.getInitialProps = async ({ req }) => {
-  const res = await fetch("https://api.github.com/repos/zeit/next.js");
-  const json = await res.json();
-  return { stars: json.stargazers_count };
-};
+
 // The `graphql` wrapper executes a GraphQL query and makes the results
 // available on the `data` prop of the wrapped component (EventList)
 export default graphql(query, {

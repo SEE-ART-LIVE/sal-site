@@ -1,22 +1,20 @@
-
 import gql from "graphql-tag";
 import Link from "next/link";
 import { graphql } from "react-apollo";
 import { withRouter } from "next/router";
-import {
-  Col,
-  Row,
-  Table
-} from "reactstrap";
+import { Col, Row, Table } from "reactstrap";
 
 class CurrentUserEventsList extends React.Component {
-  async componentWillMount () {
-    console.log(this.props)
+  async componentWillMount() {
+    // console.log(this.props)
   }
 
-  render () {
-    const { data: { loading, error, users }, search } = this.props;
-      if (error)
+  render() {
+    const {
+      data: { loading, error, users },
+      search
+    } = this.props;
+    if (error)
       return (
         <div className="py-5">
           <Row>
@@ -28,7 +26,7 @@ class CurrentUserEventsList extends React.Component {
       );
     if (users && users.length) {
       let events = users[0] !== null ? users[0].event : [];
-      events = events !== null ? events : []
+      events = events !== null ? events : [];
       if (events.length != 0) {
         return (
           <div className="py-5">
@@ -58,10 +56,10 @@ class CurrentUserEventsList extends React.Component {
                         <td>
                           <Link
                             as={`/location?eventid=${res._id}&userid=${
-                              users[0]._id
+                              this.props.user
                             }`}
                             href={`/location?eventid=${res._id}&userid=${
-                              users[0]._id
+                              this.props.user
                             }`}
                           >
                             <a className="btn btn-primary">Edit</a>
@@ -93,8 +91,8 @@ class CurrentUserEventsList extends React.Component {
             <Row>
               <Col sm="12" md="12">
                 <Link
-                  as={`/event?userid=${users[0]._id}`}
-                  href={`/event?userid=${users[0]._id}`}
+                  as={`/event/${this.props.user}`}
+                  href={`/event/${this.props.user}`}
                 >
                   <a className="btn btn-primary">Add Event</a>
                 </Link>
@@ -103,13 +101,14 @@ class CurrentUserEventsList extends React.Component {
             <Row>
               <Col sm="12" md="12">
                 <Link
-                  as={`/event?userid=${users[0]._id}`}
-                  href={`/event?userid=${users[0]._id}`}
+                  as={`/event/${this.props.user}`}
+                  href={`/event/${this.props.user}`}
                 >
                   <a className="btn btn-primary">Add Event</a>
                 </Link>
               </Col>
-            </Row> cat 
+            </Row>{" "}
+            cat
           </div>
         );
       } else {
@@ -127,8 +126,8 @@ class CurrentUserEventsList extends React.Component {
               <Row>
                 <Col sm="12" md="12">
                   <Link
-                    as={`/event?userid=${users[0]._id}`}
-                    href={`/event?userid=${users[0]._id}`}
+                    as={`/event/${this.props.user}`}
+                    href={`/event/${this.props.user}`}
                   >
                     <a className="btn btn-primary">Add Event</a>
                   </Link>
@@ -148,8 +147,8 @@ class CurrentUserEventsList extends React.Component {
         </Row>
       </div>
     );
-  };
-};
+  }
+}
 
 const query = gql`
   query users($id: ID!) {
@@ -190,4 +189,4 @@ export const componentQuery = graphql(query, {
   })
 })(CurrentUserEventsList);
 
-export default withRouter(componentQuery)
+export default withRouter(componentQuery);
