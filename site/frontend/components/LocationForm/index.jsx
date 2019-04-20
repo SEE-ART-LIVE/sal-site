@@ -1,37 +1,50 @@
 /* components/LocationForm/index.js */
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import { withRouter } from 'next/router'
-import Lform from './form'
-import {
-  FormGroup,
-  Alert
-} from "reactstrap";
+import { withRouter } from "next/router";
+import Lform from "./form";
+import { FormGroup, Alert } from "reactstrap";
 
 class LocationForm extends React.Component {
   render() {
-    const { data: { loading, error, users } } = this.props;
+    const {
+      data: { loading, error, users }
+    } = this.props;
     if (this.props.router.query.locationid === undefined) {
       return (
-         <Lform loggedUser={this.props.loggedUser}/>
+        <Lform
+          loggedUser={this.props.loggedUser}
+          loggedId={this.props.loggedId}
+        />
       );
     }
     if (error)
       return (
-        <FormGroup><Alert color="danger">Error Loading Form, Please reload and try again.</Alert></FormGroup>
+        <FormGroup>
+          <Alert color="danger">
+            Error Loading Form, Please reload and try again.
+          </Alert>
+        </FormGroup>
       );
     if (users && users.length) {
       let locations = users[0].location;
       locations = locations.filter(l => {
         return l._id === this.props.router.query.locationid;
-      })
+      });
       if (locations.length !== 0) {
         return (
-          <Lform location={locations} loggedUser={this.props.loggedUser}/>
+          <Lform
+            location={locations}
+            loggedUser={this.props.loggedUser}
+            loggedId={this.props.loggedId}
+          />
         );
       } else {
         return (
-          <Lform loggedUser={this.props.loggedUser}/>
+          <Lform
+            loggedUser={this.props.loggedUser}
+            loggedId={this.props.loggedId}
+          />
         );
       }
     }

@@ -23,7 +23,7 @@ class Location extends React.Component {
   }
 
   render() {
-    return <LocationForm user={this.props.loggedId} loggedUser={this.props.loggedUser}/>;
+    return <LocationForm loggedId={this.props.loggedId} loggedUser={this.props.loggedUser}/>;
   }
 }
 

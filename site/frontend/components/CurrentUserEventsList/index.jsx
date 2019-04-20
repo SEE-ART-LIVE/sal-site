@@ -25,8 +25,7 @@ class CurrentUserEventsList extends React.Component {
         </div>
       );
     if (users && users.length) {
-      let events = users[0] !== null ? users[0].event : [];
-      events = events !== null ? events : [];
+      let events = users;
       if (events.length != 0) {
         return (
           <div className="py-5">
@@ -48,18 +47,26 @@ class CurrentUserEventsList extends React.Component {
                   </thead>
                   <tbody>
                     {events.map(res => (
-                      <tr key={res._id}>
-                        <td>{res.Title}</td>
-                        <td>{res.Description}</td>
-                        <td>{res.location.Name}</td>
-                        <td>{res.Date}</td>
+                      <tr key={res.event._id}>
+                        <td>
+                          {res.event.Title !== null ? res.event.Title : ""}
+                        </td>
+                        <td>
+                          {res.event.Description !== null
+                            ? res.event.Description
+                            : ""}
+                        </td>
+                        <td>
+                          {res.event.location !== null ? res.event.Name : ""}
+                        </td>
+                        <td>{res.event.Date !== null ? res.event.Date : ""}</td>
                         <td>
                           <Link
-                            as={`/location?eventid=${res._id}&userid=${
-                              this.props.user
+                            as={`/location?eventid=${res.event._id}&userid=${
+                              this.props.loggedId
                             }`}
-                            href={`/location?eventid=${res._id}&userid=${
-                              this.props.user
+                            href={`/location?eventid=${res.event._id}&userid=${
+                              this.props.loggedId
                             }`}
                           >
                             <a className="btn btn-primary">Edit</a>
@@ -91,24 +98,13 @@ class CurrentUserEventsList extends React.Component {
             <Row>
               <Col sm="12" md="12">
                 <Link
-                  as={`/event/${this.props.user}`}
-                  href={`/event/${this.props.user}`}
+                  as={`/event/${this.props.loggedId}`}
+                  href={`/event/${this.props.loggedId}`}
                 >
                   <a className="btn btn-primary">Add Event</a>
                 </Link>
               </Col>
             </Row>
-            <Row>
-              <Col sm="12" md="12">
-                <Link
-                  as={`/event/${this.props.user}`}
-                  href={`/event/${this.props.user}`}
-                >
-                  <a className="btn btn-primary">Add Event</a>
-                </Link>
-              </Col>
-            </Row>{" "}
-            cat
           </div>
         );
       } else {
@@ -126,8 +122,8 @@ class CurrentUserEventsList extends React.Component {
               <Row>
                 <Col sm="12" md="12">
                   <Link
-                    as={`/event/${this.props.user}`}
-                    href={`/event/${this.props.user}`}
+                    as={`/event/${this.props.loggedId}`}
+                    href={`/event/${this.props.loggedId}`}
                   >
                     <a className="btn btn-primary">Add Event</a>
                   </Link>
@@ -183,7 +179,7 @@ const query = gql`
 // The `graphql` wrapper executes a GraphQL query and makes the results
 // available on the `data` prop of the wrapped component (RestaurantList)
 export const componentQuery = graphql(query, {
-  options: props => ({ variables: { id: props.user } }),
+  options: props => ({ variables: { id: props.loggedId } }),
   props: ({ data }) => ({
     data
   })

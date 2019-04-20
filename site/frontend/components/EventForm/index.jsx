@@ -4,6 +4,7 @@ import { graphql } from "react-apollo";
 import { withRouter } from "next/router";
 import Eform from "./form";
 import { FormGroup, Alert } from "reactstrap";
+import Link from "next/link";
 
 class EventForm extends React.Component {
   async componentWillMount () {
@@ -29,7 +30,7 @@ class EventForm extends React.Component {
           return (
             <Eform 
               location={locations} 
-              loggedUser={this.props.loggedUser} 
+              loggedUser={this.props.loggedUser}
               loggedId={this.props.loggedId} 
             />
           );
@@ -45,12 +46,10 @@ class EventForm extends React.Component {
         } else {
           return (
             <FormGroup>
-              <Alert color="danger">
-                Please add some locations.{" "}
+                <p>Please add your first location.{" "}</p>
                 <Link as={`/location`} href={`/location`}>
                   <a className="btn btn-primary">Add Location</a>
                 </Link>
-              </Alert>
             </FormGroup>
           );
         }

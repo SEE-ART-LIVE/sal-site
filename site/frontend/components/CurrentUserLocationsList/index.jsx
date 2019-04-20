@@ -3,14 +3,9 @@ import gql from "graphql-tag";
 import Link from "next/link";
 import { graphql } from "react-apollo";
 import {
-  Card,
-  CardBody,
-  CardText,
-  CardTitle,
   Col,
   Row,
-  Table,
-  Button
+  Table
 } from "reactstrap";
 
 const CurrentUserLocationsList = (
@@ -162,7 +157,7 @@ const query = gql`
 // The `graphql` wrapper executes a GraphQL query and makes the results
 // available on the `data` prop of the wrapped component (RestaurantList)
 export default graphql(query, {
-  options: props => ({ variables: { id: props.user } }),
+  options: props => ({ variables: { id: props.loggedId } }),
   props: ({ data }) => ({
     data
   })

@@ -29,8 +29,8 @@ class User extends React.Component {
   render() {
     return (
       <div className="container-fluid">
-        <CurrentUserLocationsList user={this.props.loggedId} />
-        <CurrentUserEventsList user={this.props.loggedId} />
+        <CurrentUserLocationsList loggedId={this.props.loggedId} />
+        <CurrentUserEventsList loggedId={this.props.loggedId} />
       </div>
     );
   }

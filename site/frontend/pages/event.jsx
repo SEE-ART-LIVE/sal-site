@@ -27,7 +27,7 @@ class Event extends React.Component {
   }
 
   render() {
-    return <EventForm user={this.props.loggedId} />;
+    return <EventForm loggedId={this.props.loggedId} loggedUser={this.props.loggedUser} />;
   }
 }
 

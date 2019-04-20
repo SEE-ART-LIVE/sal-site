@@ -13,6 +13,7 @@ import { Label, Input, Row, Col, Button } from "reactstrap";
 import css from "react-datepicker/dist/react-datepicker.min.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.min.css";
+import DatePickerInput from "../DatePickerInput";
 
 class EForm extends React.Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class EForm extends React.Component {
       startDate: new Date(),
       data: {
         title: "",
-        date: "",
+        date: null,
         description: "",
         location: "",
         user: this.props.loggedUser !== undefined ? this.props.loggedUser : ""
@@ -35,12 +36,21 @@ class EForm extends React.Component {
       errors: [],
       buttonText: this.props.event !== undefined ? `Update` : `Submit`
     };
+    this.handleChange = this.handleChange.bind(this);
   }
-  onChange(propertyName, event) {
+  handleChange(date) {
+    const { data } = this.state;
+    data["date"] = date;
+    this.setState({ data });
+    console.table(data);
+  }
+  onChange(propertyName, event, date) {
     const { data } = this.state;
     if (propertyName === "file") {
       this.readURL(document.getElementById(propertyName));
       this.setState({ file: event.target.files[0] });
+    } else if (propertyName === "date") {
+      // data[propertyName] = event.toString();
     } else {
       data[propertyName] = event.target.value;
     }
@@ -70,6 +80,8 @@ class EForm extends React.Component {
       const userId = this.props.loggedId;
       const formData = new FormData();
 
+      console.log(this.props)
+
       if (this.props.event) {
         await axios.put(
           `http://localhost:1337/events/${this.props.router.query.eventid}`,
@@ -98,8 +110,10 @@ class EForm extends React.Component {
         );
         const addressRes = await postNewAddress.data;
         await axios.put(`http://localhost:1337/users/${userId}`, {
-          location: [addressRes._id]
+          event: [addressRes._id]
         });
+        // get Location Id and set it on the event
+
         formData.append("files", file);
         formData.append("path", "location/images");
         formData.append("refId", addressRes._id);
@@ -124,7 +138,7 @@ class EForm extends React.Component {
     }
   }
   render() {
-    console.log(css)
+    console.log(css);
     return (
       <div className="container-fluid">
         <Row>
@@ -165,24 +179,30 @@ class EForm extends React.Component {
                 </AvGroup>
                 <AvGroup>
                   <Label>Date:</Label>
-
+                  <br />
+                  <style jsx>
+                    {`
+                      input {
+                        width: 100%;
+                        height: 50px;
+                      }
+                    `}
+                  </style>
                   <DatePicker
-                    onChange={this.onChange.bind(this, "date")}
+                    selected={this.state.data.date}
+                    onChange={this.handleChange}
                     showTimeSelect
                     timeFormat="HH:mm"
                     timeIntervals={15}
                     dateFormat="MMMM d, yyyy h:mm aa"
                     timeCaption="time"
-                  />
-
-                  {/*                   <DateTimePicker
-                    onChange={this.onChange.bind(this, "date")}
-                    defaultValue={new Date()}
-                    data={["orange", "red", "blue", "purple"]}
                     name="date"
                     style={{ height: 50, fontSize: "1.2em" }}
+                    className="is-untouched is-pristine av-invalid form-control"
+                    placeholderText="Click to select a date"
+                    customInput={<DatePickerInput />}
                     required
-                  /> */}
+                  />
                 </AvGroup>
                 <AvGroup>
                   <Label>Location:</Label>
@@ -194,6 +214,7 @@ class EForm extends React.Component {
                     style={{ height: 50, fontSize: "1.2em" }}
                     required
                   >
+                    <option label=" " />
                     {this.props.location.map(res => (
                       <option key={res._id} value={res.Address}>
                         {res.Address}

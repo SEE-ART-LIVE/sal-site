@@ -1,9 +1,3 @@
-// next.config.js 
+// next.config.js
 const withCSS = require('@zeit/next-css')
-
-module.exports = withCSS({
-  cssModules: true,
-  cssLoaderOptions: {
-    url: false
-  }
-})
+module.exports = withCSS()
