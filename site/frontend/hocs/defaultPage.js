@@ -20,9 +20,9 @@ export default Page =>
         ? getIdFromLocalCookie()
         : getIdFromServerCookie(req);
       const pageProps = Page.getInitialProps && Page.getInitialProps(req);
-      console.log("is authenticated");
+      /*       console.log("is authenticated");
       console.log(loggedUser);
-      console.log(loggedId);
+      console.log(loggedId); */
       return {
         Router,
         ...pageProps,

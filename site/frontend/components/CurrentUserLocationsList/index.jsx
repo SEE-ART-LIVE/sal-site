@@ -2,11 +2,7 @@
 import gql from "graphql-tag";
 import Link from "next/link";
 import { graphql } from "react-apollo";
-import {
-  Col,
-  Row,
-  Table
-} from "reactstrap";
+import { Col, Row, Table } from "reactstrap";
 
 const CurrentUserLocationsList = (
   { data: { loading, error, users }, search },
@@ -56,14 +52,33 @@ const CurrentUserLocationsList = (
                 <tbody>
                   {locations.map(res => (
                     <tr key={res._id}>
-                      <td>{res.Name}</td>
+                      <td>
+                        {" "}
+                        <img
+                          src={
+                            res.Image.url !== null
+                              ? `http://localhost:1337/${res.Image.url}`
+                              : ""
+                          }
+                          style={{
+                            width: `50px`,
+                            height: `auto`,
+                            marginRight: `10px`
+                          }}
+                        />
+                        {res.Name}
+                      </td>
                       <td>{res.Description}</td>
                       <td>{res.Address}</td>
                       <td>{res.City}</td>
                       <td>
                         <Link
-                          as={`/location?locationid=${res._id}&userid=${users[0]._id}`}
-                          href={`/location?locationid=${res._id}&userid=${users[0]._id}`}
+                          as={`/location?locationid=${res._id}&userid=${
+                            users[0]._id
+                          }`}
+                          href={`/location?locationid=${res._id}&userid=${
+                            users[0]._id
+                          }`}
                         >
                           <a className="btn btn-primary">Edit</a>
                         </Link>
@@ -93,7 +108,10 @@ const CurrentUserLocationsList = (
           </Row>
           <Row>
             <Col sm="12" md="12">
-              <Link as={`/location`} href={`/location`}>
+              <Link
+                as={`/location?userid=${users[0]._id}`}
+                href={`/location?userid=${users[0]._id}`}
+              >
                 <a className="btn btn-primary">Add Location</a>
               </Link>
             </Col>
@@ -113,7 +131,10 @@ const CurrentUserLocationsList = (
           <div className="py-2">
             <Row>
               <Col sm="12" md="12">
-                <Link as={`/location`} href={`/location`}>
+                <Link
+                  as={`/location?userid=${users[0]._id}`}
+                  href={`/location?userid=${users[0]._id}`}
+                >
                   <a className="btn btn-primary">Add Location</a>
                 </Link>
               </Col>

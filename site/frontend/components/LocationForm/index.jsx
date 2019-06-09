@@ -10,6 +10,7 @@ class LocationForm extends React.Component {
     const {
       data: { loading, error, users }
     } = this.props;
+    console.log(loading, error, users);
     if (this.props.router.query.locationid === undefined) {
       return (
         <Lform

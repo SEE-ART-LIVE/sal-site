@@ -1,7 +1,7 @@
 import React from "react";
 import defaultPage from "../hocs/defaultPage";
 import LocationForm from "../components/LocationForm";
-import axios from 'axios'
+import axios from "axios";
 
 class Location extends React.Component {
   constructor(props) {
@@ -23,7 +23,12 @@ class Location extends React.Component {
   }
 
   render() {
-    return <LocationForm loggedId={this.props.loggedId} loggedUser={this.props.loggedUser}/>;
+    return (
+      <LocationForm
+        loggedId={this.props.loggedId}
+        loggedUser={this.props.loggedUser}
+      />
+    );
   }
 }
 

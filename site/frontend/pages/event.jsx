@@ -1,22 +1,11 @@
 import React from "react";
 import defaultPage from "../hocs/defaultPage";
 import EventForm from "../components/EventForm";
-import axios from 'axios'
+import axios from "axios";
 
 class Event extends React.Component {
   constructor(props) {
     super(props);
-    //query state will be passed to RestaurantList for the filter query
-    this.state = {
-      query: "",
-      user: "",
-      loading: false,
-      error: ""
-    };
-  }
-
-  async componentWillMount () {
-    // console.log(`event.js`)
   }
 
   async componentDidMount() {
@@ -27,7 +16,12 @@ class Event extends React.Component {
   }
 
   render() {
-    return <EventForm loggedId={this.props.loggedId} loggedUser={this.props.loggedUser} />;
+    return (
+      <EventForm
+        loggedId={this.props.loggedId}
+        loggedUser={this.props.loggedUser}
+      />
+    );
   }
 }
 

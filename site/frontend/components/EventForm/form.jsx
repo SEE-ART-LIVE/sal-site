@@ -1,6 +1,4 @@
 /* components/EventForm/form.js */
-// import { states } from "../../lists/usStates";
-// import { countries } from "../../lists/worldCountries";
 import { withRouter } from "next/router";
 import axios from "axios";
 import {
@@ -9,11 +7,10 @@ import {
   AvGroup,
   AvInput
 } from "availity-reactstrap-validation";
-import { Label, Input, Row, Col, Button } from "reactstrap";
-import css from "react-datepicker/dist/react-datepicker.min.css";
-import DatePicker from "react-datepicker";
+import { Label, Row, Col, Button } from "reactstrap";
+/* import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.min.css";
-import DatePickerInput from "../DatePickerInput";
+import DatePickerInput from "../DatePickerInput"; */
 
 class EForm extends React.Component {
   constructor(props) {
@@ -38,11 +35,15 @@ class EForm extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
   }
+  removeImage() {
+    const { file } = this.state;
+    this.setState({ file: null });
+  }
   handleChange(date) {
     const { data } = this.state;
     data["date"] = date;
     this.setState({ data });
-    console.table(data);
+    // console.table(data);
   }
   onChange(propertyName, event, date) {
     const { data } = this.state;
@@ -57,12 +58,12 @@ class EForm extends React.Component {
     this.setState({ data });
   }
   async deletePost() {
-    /*     if (this.props.event) {
-          await axios.delete(`http://localhost:1337/events/`, {
-            _id: this.props.router.query.eventid
-          });
-          this.props.router.push(`/user/${this.props.loggedUser}`);
-        } */
+    if (this.props.event) {
+      await axios.delete(`http://localhost:1337/events/`, {
+        _id: this.props.router.query.eventid
+      });
+      this.props.router.push(`/user/${this.props.loggedUser}`);
+    }
   }
   async readURL(input) {
     if (input.files && input.files[0]) {
@@ -79,9 +80,6 @@ class EForm extends React.Component {
       this.setState({ loading: true });
       const userId = this.props.loggedId;
       const formData = new FormData();
-
-      console.log(this.props)
-
       if (this.props.event) {
         await axios.put(
           `http://localhost:1337/events/${this.props.router.query.eventid}`,
@@ -99,25 +97,27 @@ class EForm extends React.Component {
         formData.append("field", "Image");
         await axios.post("http://localhost:1337/upload/", formData);
       } else {
-        const postNewAddress = await axios.post(
-          "http://localhost:1337/events/",
-          {
-            Title: data.title,
-            Date: data.date,
-            Description: data.description,
-            Location: data.location
-          }
-        );
-        const addressRes = await postNewAddress.data;
-        await axios.put(`http://localhost:1337/users/${userId}`, {
-          event: [addressRes._id]
+        const postNewEvent = await axios.post("http://localhost:1337/events/", {
+          Title: data.title,
+          Date: data.date,
+          Description: data.description
         });
+        const eventID = await postNewEvent.data;
+
+        // get userID and set it to the event
+        await axios.put(`http://localhost:1337/users/${userId}`, {
+          event: [eventID._id]
+        });
+
         // get Location Id and set it on the event
+        await axios.put(`http://localhost:1337/locations/${data.location}`, {
+          event: [eventID._id]
+        });
 
         formData.append("files", file);
-        formData.append("path", "location/images");
-        formData.append("refId", addressRes._id);
-        formData.append("ref", "location");
+        formData.append("path", "event/images");
+        formData.append("refId", eventID._id);
+        formData.append("ref", "event");
         formData.append("field", "Image");
         await axios.post("http://localhost:1337/upload/", formData);
       }
@@ -127,18 +127,18 @@ class EForm extends React.Component {
     }
   }
   async componentWillMount() {
+    // console.log(this.props.event[0]);
     if (this.props.event) {
       const { data } = this.state;
       data["title"] = this.props.event[0].Title;
       data["description"] = this.props.event[0].Description;
-      data["date"] = this.props.event[0].Date;
-      data["location"] = this.props.event[0].Location;
+      data["date"] = new Date(this.props.event[0].Date);
+      data["location"] = this.props.event[0].location._id;
       this.setState({ data });
       this.setState({ file: this.props.event[0].Image.url });
     }
   }
   render() {
-    console.log(css);
     return (
       <div className="container-fluid">
         <Row>
@@ -188,7 +188,7 @@ class EForm extends React.Component {
                       }
                     `}
                   </style>
-                  <DatePicker
+                  {/*                   <DatePicker
                     selected={this.state.data.date}
                     onChange={this.handleChange}
                     showTimeSelect
@@ -202,7 +202,7 @@ class EForm extends React.Component {
                     placeholderText="Click to select a date"
                     customInput={<DatePickerInput />}
                     required
-                  />
+                  /> */}
                 </AvGroup>
                 <AvGroup>
                   <Label>Location:</Label>
@@ -216,7 +216,7 @@ class EForm extends React.Component {
                   >
                     <option label=" " />
                     {this.props.location.map(res => (
-                      <option key={res._id} value={res.Address}>
+                      <option key={res._id} value={res._id}>
                         {res.Address}
                       </option>
                     ))}
@@ -224,28 +224,40 @@ class EForm extends React.Component {
                 </AvGroup>
                 <AvGroup>
                   <Row>
-                    <Col>
-                      <Label>Image:</Label>
-                      <AvInput
-                        onChange={this.onChange.bind(this, "file")}
-                        type="file"
-                        id="file"
-                        name="file"
-                        value={this.state.file !== null ? this.state.name : ""}
-                        style={{ height: 50, fontSize: "1.2em" }}
-                        required
-                      />
-                    </Col>
-                    <Col>
-                      <img
-                        id="preview"
-                        src={
-                          this.state.file !== null
-                            ? `http://localhost:1337${this.state.file}`
-                            : ""
-                        }
-                      />
-                    </Col>
+                    {this.state.file !== null ? (
+                      <Col>
+                        <Button
+                          style={{
+                            position: "absolute",
+                            bottom: 20,
+                            right: 40
+                          }}
+                          onClick={this.removeImage.bind(this)}
+                        >
+                          Change Image
+                        </Button>
+
+                        <img
+                          id="preview"
+                          src={
+                            this.state.file !== null
+                              ? `http://localhost:1337${this.state.file}`
+                              : ""
+                          }
+                        />
+                      </Col>
+                    ) : (
+                      <Col>
+                        <AvInput
+                          onChange={this.onChange.bind(this, "file")}
+                          type="file"
+                          id="file"
+                          name="file"
+                          style={{ height: 50, fontSize: "1.2em" }}
+                          required
+                        />
+                      </Col>
+                    )}
                   </Row>
                 </AvGroup>
                 <AvGroup>

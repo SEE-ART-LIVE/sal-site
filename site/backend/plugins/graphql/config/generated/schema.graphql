@@ -120,7 +120,7 @@ input editUserInput {
   blocked: Boolean
   role: ID
   location: [ID]
-  event: ID
+  event: [ID]
 }
 
 enum ENUM_LOCATION_COUNTRY {
@@ -672,7 +672,7 @@ input LocationInput {
   user: ID
 }
 
-union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Event | createEventPayload | updateEventPayload | deleteEventPayload | EventConnection | EventAggregator | EventGroupBy | EventConnection_id | EventConnectionCreatedAt | EventConnectionUpdatedAt | EventConnectionTitle | EventConnectionImage | EventConnectionDate | EventConnectionDescription | EventConnectionLocation | EventConnectionUser | Location | createLocationPayload | updateLocationPayload | deleteLocationPayload | LocationConnection | LocationAggregator | LocationAggregatorSum | LocationAggregatorAvg | LocationAggregatorMin | LocationAggregatorMax | LocationGroupBy | LocationConnection_id | LocationConnectionCreatedAt | LocationConnectionUpdatedAt | LocationConnectionName | LocationConnectionDescription | LocationConnectionAddress | LocationConnectionCity | LocationConnectionState | LocationConnectionZipcode | LocationConnectionImage | LocationConnectionCountry | LocationConnectionEvent | LocationConnectionUser | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileGroupBy | UploadFileConnection_id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionHash | UploadFileConnectionSha256 | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionProvider | UploadFileConnectionPublic_id | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnection_id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnection_id | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole | UsersPermissionsUserConnectionEvent
+union Morph = UsersPermissionsMe | UsersPermissionsMeRole | Event | createEventPayload | updateEventPayload | deleteEventPayload | EventConnection | EventAggregator | EventGroupBy | EventConnection_id | EventConnectionCreatedAt | EventConnectionUpdatedAt | EventConnectionTitle | EventConnectionImage | EventConnectionDate | EventConnectionDescription | EventConnectionLocation | EventConnectionUser | Location | createLocationPayload | updateLocationPayload | deleteLocationPayload | LocationConnection | LocationAggregator | LocationAggregatorSum | LocationAggregatorAvg | LocationAggregatorMin | LocationAggregatorMax | LocationGroupBy | LocationConnection_id | LocationConnectionCreatedAt | LocationConnectionUpdatedAt | LocationConnectionName | LocationConnectionDescription | LocationConnectionAddress | LocationConnectionCity | LocationConnectionState | LocationConnectionZipcode | LocationConnectionImage | LocationConnectionCountry | LocationConnectionEvent | LocationConnectionUser | UploadFile | UploadFileConnection | UploadFileAggregator | UploadFileGroupBy | UploadFileConnection_id | UploadFileConnectionCreatedAt | UploadFileConnectionUpdatedAt | UploadFileConnectionName | UploadFileConnectionHash | UploadFileConnectionSha256 | UploadFileConnectionExt | UploadFileConnectionMime | UploadFileConnectionSize | UploadFileConnectionUrl | UploadFileConnectionProvider | UploadFileConnectionPublic_id | UsersPermissionsPermission | UsersPermissionsRole | createRolePayload | updateRolePayload | deleteRolePayload | UsersPermissionsRoleConnection | UsersPermissionsRoleAggregator | UsersPermissionsRoleGroupBy | UsersPermissionsRoleConnection_id | UsersPermissionsRoleConnectionName | UsersPermissionsRoleConnectionDescription | UsersPermissionsRoleConnectionType | UsersPermissionsUser | createUserPayload | updateUserPayload | deleteUserPayload | UsersPermissionsUserConnection | UsersPermissionsUserAggregator | UsersPermissionsUserGroupBy | UsersPermissionsUserConnection_id | UsersPermissionsUserConnectionUsername | UsersPermissionsUserConnectionEmail | UsersPermissionsUserConnectionProvider | UsersPermissionsUserConnectionConfirmed | UsersPermissionsUserConnectionBlocked | UsersPermissionsUserConnectionRole
 
 type Mutation {
   createEvent(input: createEventInput): createEventPayload
@@ -882,7 +882,7 @@ input UserInput {
   blocked: Boolean
   role: ID
   location: [ID]
-  event: ID
+  event: [ID]
 }
 
 type UsersPermissionsMe {
@@ -965,8 +965,8 @@ type UsersPermissionsUser {
   confirmed: Boolean
   blocked: Boolean
   role: UsersPermissionsRole
-  event: Event
   location(sort: String, limit: Int, start: Int, where: JSON): [Location]
+  event(sort: String, limit: Int, start: Int, where: JSON): [Event]
 }
 
 type UsersPermissionsUserAggregator {
@@ -999,11 +999,6 @@ type UsersPermissionsUserConnectionEmail {
   connection: UsersPermissionsUserConnection
 }
 
-type UsersPermissionsUserConnectionEvent {
-  key: ID
-  connection: UsersPermissionsUserConnection
-}
-
 type UsersPermissionsUserConnectionProvider {
   key: String
   connection: UsersPermissionsUserConnection
@@ -1027,5 +1022,4 @@ type UsersPermissionsUserGroupBy {
   confirmed: [UsersPermissionsUserConnectionConfirmed]
   blocked: [UsersPermissionsUserConnectionBlocked]
   role: [UsersPermissionsUserConnectionRole]
-  event: [UsersPermissionsUserConnectionEvent]
 }

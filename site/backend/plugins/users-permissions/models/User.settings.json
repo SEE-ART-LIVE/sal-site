@@ -54,7 +54,7 @@
       "via": "user"
     },
     "event": {
-      "model": "event",
+      "collection": "event",
       "via": "user"
     }
   },

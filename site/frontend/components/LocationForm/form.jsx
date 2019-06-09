@@ -7,14 +7,9 @@ import {
   AvForm,
   AvField,
   AvGroup,
-  AvInput,
-  AvFeedback,
-  AvRadioGroup,
-  AvRadio,
-  AvCheckboxGroup,
-  AvCheckbox
+  AvInput
 } from "availity-reactstrap-validation";
-import { Form, FormGroup, Label, Input, Row, Col, Button } from "reactstrap";
+import { Label, Row, Col, Button } from "reactstrap";
 
 class LForm extends React.Component {
   constructor(props) {
@@ -39,6 +34,10 @@ class LForm extends React.Component {
       errors: [],
       buttonText: this.props.location !== undefined ? `Update` : `Submit`
     };
+  }
+  removeImage() {
+    const { file } = this.state;
+    this.setState({ file: null });
   }
   onChange(propertyName, event) {
     const { data, file } = this.state;
@@ -124,7 +123,7 @@ class LForm extends React.Component {
         formData.append("field", "Image");
         await axios.post("http://localhost:1337/upload/", formData);
       }
-      
+
       this.setState({ loading: false });
       this.props.router.push(`/user/${this.props.loggedUser}`);
     }
@@ -257,26 +256,40 @@ class LForm extends React.Component {
                 </AvGroup>
                 <AvGroup>
                   <Row>
-                    <Col>
-                      <Label>Image:</Label>
-                      <AvInput
-                        onChange={this.onChange.bind(this, "file")}
-                        type="file"
-                        id="file"
-                        name="file"
-                        value={this.state.file !== null ? this.state.name : ""}
-                        style={{ height: 50, fontSize: "1.2em" }}
-                        required
-                      />
-                    </Col>
-                    <Col>
-                      <img
-                        id="preview"
-                        src={
-                          this.state.file !== null ? `http://localhost:1337${this.state.file}` : ""
-                        }
-                      />
-                    </Col>
+                    {this.state.file !== null ? (
+                      <Col>
+                        <Button
+                          style={{
+                            position: "absolute",
+                            bottom: 20,
+                            right: 40
+                          }}
+                          onClick={this.removeImage.bind(this)}
+                        >
+                          Change Image
+                        </Button>
+                        <Label>Image:</Label>
+                        <img
+                          id="preview"
+                          src={
+                            this.state.file !== null
+                              ? `http://localhost:1337${this.state.file}`
+                              : ""
+                          }
+                        />
+                      </Col>
+                    ) : (
+                      <Col>
+                        <Label>Image:</Label>
+                        <AvInput
+                          onChange={this.onChange.bind(this, "file")}
+                          type="file"
+                          id="file"
+                          name="file"
+                          style={{ height: 50, fontSize: "1.2em" }}
+                        />
+                      </Col>
+                    )}
                   </Row>
                 </AvGroup>
                 <AvGroup>

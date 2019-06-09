@@ -6,7 +6,31 @@ import { Col, Row, Table } from "reactstrap";
 
 class CurrentUserEventsList extends React.Component {
   async componentWillMount() {
-    // console.log(this.props)
+    console.log(this.props);
+  }
+
+  formatDate(date) {
+    date = new Date(date);
+    var monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+
+    var day = date.getDate();
+    var monthIndex = date.getMonth();
+    var year = date.getFullYear();
+
+    return day + " " + monthNames[monthIndex] + " " + year;
   }
 
   render() {
@@ -25,7 +49,8 @@ class CurrentUserEventsList extends React.Component {
         </div>
       );
     if (users && users.length) {
-      let events = users;
+      let events = users[0].event;
+      // console.log(users[0].event);
       if (events.length != 0) {
         return (
           <div className="py-5">
@@ -46,26 +71,38 @@ class CurrentUserEventsList extends React.Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {events.map(res => (
-                      <tr key={res.event._id}>
+                    {events.map(event => (
+                      <tr key={event._id}>
                         <td>
-                          {res.event.Title !== null ? res.event.Title : ""}
+                          <img
+                            src={
+                              event.Image.url !== null
+                                ? `http://localhost:1337/${event.Image.url}`
+                                : ""
+                            }
+                            style={{
+                              width: `50px`,
+                              height: `auto`,
+                              marginRight: `10px`
+                            }}
+                          />
+                          {event.Title !== null ? event.Title : ""}
                         </td>
                         <td>
-                          {res.event.Description !== null
-                            ? res.event.Description
+                          {event.Description !== null ? event.Description : ""}
+                        </td>
+                        <td>{event.location !== null ? event.Name : ""}</td>
+                        <td>
+                          {event.Date !== null
+                            ? this.formatDate(event.Date)
                             : ""}
                         </td>
                         <td>
-                          {res.event.location !== null ? res.event.Name : ""}
-                        </td>
-                        <td>{res.event.Date !== null ? res.event.Date : ""}</td>
-                        <td>
                           <Link
-                            as={`/location?eventid=${res.event._id}&userid=${
+                            as={`/event?eventid=${event._id}&userid=${
                               this.props.loggedId
                             }`}
-                            href={`/location?eventid=${res.event._id}&userid=${
+                            href={`/event?eventid=${event._id}&userid=${
                               this.props.loggedId
                             }`}
                           >
@@ -98,8 +135,8 @@ class CurrentUserEventsList extends React.Component {
             <Row>
               <Col sm="12" md="12">
                 <Link
-                  as={`/event/${this.props.loggedId}`}
-                  href={`/event/${this.props.loggedId}`}
+                  as={`/event?userid=${this.props.loggedId}`}
+                  href={`/event?userid=${this.props.loggedId}`}
                 >
                   <a className="btn btn-primary">Add Event</a>
                 </Link>
@@ -122,8 +159,8 @@ class CurrentUserEventsList extends React.Component {
               <Row>
                 <Col sm="12" md="12">
                   <Link
-                    as={`/event/${this.props.loggedId}`}
-                    href={`/event/${this.props.loggedId}`}
+                    as={`/event?userid=${this.props.loggedId}`}
+                    href={`/event?userid=${this.props.loggedId}`}
                   >
                     <a className="btn btn-primary">Add Event</a>
                   </Link>
@@ -148,7 +185,7 @@ class CurrentUserEventsList extends React.Component {
 
 const query = gql`
   query users($id: ID!) {
-    users(where: { _id: $id }, limit: 1) {
+    users(where: { _id: $id }) {
       _id
       event {
         _id
