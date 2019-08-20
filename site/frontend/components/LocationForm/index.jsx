@@ -28,7 +28,7 @@ class LocationForm extends React.Component {
         </FormGroup>
       );
     if (users && users.length) {
-      let locations = users[0].location;
+      let locations = users[0].locations;
       locations = locations.filter(l => {
         return l._id === this.props.router.query.locationid;
       });
@@ -61,7 +61,7 @@ const query = gql`
   query users($id: ID!) {
     users(where: { _id: $id }, limit: 1) {
       _id
-      location {
+      locations {
         _id
         Name
         Description

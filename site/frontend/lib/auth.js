@@ -13,9 +13,9 @@ export const strapiCreateEntry = (contentTypePluralized, data) => {
   if (!process.browser) {
     return undefined;
   }
-  console.log(data)
+  // console.log(data)
   strapi.createEntry(contentTypePluralized, data).then(res => {
-    console.log(res);
+    // console.log(res);
   });
   return Promise.resolve();
 };
@@ -136,6 +136,12 @@ export const extractInfoFromHash = () => {
   if (!process.browser) {
     return undefined;
   }
-  const { id_token, state } = getQueryParams();
-  return { token: id_token, secret: state };
+  const {
+    id_token,
+    state
+  } = getQueryParams();
+  return {
+    token: id_token,
+    secret: state
+  };
 };

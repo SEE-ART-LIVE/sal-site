@@ -8,9 +8,8 @@ import {
   AvInput
 } from "availity-reactstrap-validation";
 import { Label, Row, Col, Button } from "reactstrap";
-/* import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.min.css";
-import DatePickerInput from "../DatePickerInput"; */
+import DatePicker from "react-datepicker";
+import DatePickerInput from "../DatePickerInput";
 
 class EForm extends React.Component {
   constructor(props) {
@@ -59,16 +58,14 @@ class EForm extends React.Component {
   }
   async deletePost() {
     if (this.props.event) {
-      await axios.delete(`http://localhost:1337/events/`, {
-        _id: this.props.router.query.eventid
-      });
+      await axios.delete(`http://localhost:1337/events/${this.props.router.query.eventid}`);
       this.props.router.push(`/user/${this.props.loggedUser}`);
     }
   }
   async readURL(input) {
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         document.getElementById("preview").setAttribute("src", e.target.result);
       };
       reader.readAsDataURL(input.files[0]);
@@ -97,21 +94,29 @@ class EForm extends React.Component {
         formData.append("field", "Image");
         await axios.post("http://localhost:1337/upload/", formData);
       } else {
+
         const postNewEvent = await axios.post("http://localhost:1337/events/", {
           Title: data.title,
           Date: data.date,
           Description: data.description
         });
+
+        // Get event ID
         const eventID = await postNewEvent.data;
+
+        // Get all the events a user has
+        const userEvents = await axios.get(`http://localhost:1337/users/${userId}`)
+
+        console.log(data.location)
 
         // get userID and set it to the event
         await axios.put(`http://localhost:1337/users/${userId}`, {
-          event: [eventID._id]
+          events: [eventID._id, ...userEvents.data.events]
         });
 
         // get Location Id and set it on the event
         await axios.put(`http://localhost:1337/locations/${data.location}`, {
-          event: [eventID._id]
+          event: eventID._id
         });
 
         formData.append("files", file);
@@ -127,7 +132,7 @@ class EForm extends React.Component {
     }
   }
   async componentWillMount() {
-    // console.log(this.props.event[0]);
+    console.log(this.props.event);
     if (this.props.event) {
       const { data } = this.state;
       data["title"] = this.props.event[0].Title;
@@ -188,7 +193,12 @@ class EForm extends React.Component {
                       }
                     `}
                   </style>
-                  {/*                   <DatePicker
+                  {/*                   <DateTimePicker
+                    onChange={this.handleChange}
+                    value={this.state.data.date}
+                    required
+                  /> */}
+                  <DatePicker
                     selected={this.state.data.date}
                     onChange={this.handleChange}
                     showTimeSelect
@@ -202,7 +212,7 @@ class EForm extends React.Component {
                     placeholderText="Click to select a date"
                     customInput={<DatePickerInput />}
                     required
-                  /> */}
+                  />
                 </AvGroup>
                 <AvGroup>
                   <Label>Location:</Label>
@@ -239,6 +249,9 @@ class EForm extends React.Component {
 
                         <img
                           id="preview"
+                          style={{
+                            width: "100%"
+                          }}
                           src={
                             this.state.file !== null
                               ? `http://localhost:1337${this.state.file}`
@@ -247,17 +260,17 @@ class EForm extends React.Component {
                         />
                       </Col>
                     ) : (
-                      <Col>
-                        <AvInput
-                          onChange={this.onChange.bind(this, "file")}
-                          type="file"
-                          id="file"
-                          name="file"
-                          style={{ height: 50, fontSize: "1.2em" }}
-                          required
-                        />
-                      </Col>
-                    )}
+                        <Col>
+                          <AvInput
+                            onChange={this.onChange.bind(this, "file")}
+                            type="file"
+                            id="file"
+                            name="file"
+                            style={{ height: 50, fontSize: "1.2em" }}
+                            required
+                          />
+                        </Col>
+                      )}
                   </Row>
                 </AvGroup>
                 <AvGroup>
@@ -268,17 +281,20 @@ class EForm extends React.Component {
                     {this.state.buttonText}
                   </Button>
                 </AvGroup>
-
-                <AvGroup>
-                  <Button
-                    style={{ float: "right", width: 120 }}
-                    color="danger"
-                    onKeyPress={this.deletePost.bind(this)}
-                    onClick={this.deletePost.bind(this)}
-                  >
-                    Delete
+                {this.props.event !== undefined ? (
+                  <AvGroup>
+                    <Button
+                      style={{ float: "right", width: 120 }}
+                      color="danger"
+                      onKeyPress={this.deletePost.bind(this)}
+                      onClick={this.deletePost.bind(this)}
+                    >
+                      Delete
                   </Button>
-                </AvGroup>
+                  </AvGroup>
+                ) : (
+                    <AvGroup></AvGroup>
+                  )}
               </AvForm>
             </section>
           </Col>

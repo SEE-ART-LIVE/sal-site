@@ -15,7 +15,6 @@ class LForm extends React.Component {
   constructor(props) {
     super(props);
     this.onSubmit = this.onSubmit.bind(this);
-    //query state will be passed to RestaurantList for the filter query
     this.state = {
       query: "",
       data: {
@@ -36,36 +35,31 @@ class LForm extends React.Component {
     };
   }
   removeImage() {
-    const { file } = this.state;
     this.setState({ file: null });
   }
   onChange(propertyName, event) {
     const { data, file } = this.state;
-    console.log(propertyName);
+    // console.log(propertyName);
     if (propertyName === "file") {
-      console.log("a", event.target.files[0]);
+      // console.log("a", event.target.files[0]);
       this.readURL(document.getElementById(propertyName));
       this.setState({ file: event.target.files[0] });
     } else {
-      console.log("b");
+      // console.log("b");
       data[propertyName] = event.target.value;
     }
     this.setState({ data });
   }
   async deletePost() {
     if (this.props.location) {
-      const deleteItem = await axios.delete(
-        `http://localhost:1337/locations/`,
-        { _id: this.props.router.query.locationid }
-      );
-      const deleteItemRes = await deleteItem.data;
+      await axios.delete(`http://localhost:1337/locations/${this.props.router.query.locationid}`);
       this.props.router.push(`/user/${this.props.loggedUser}`);
     }
   }
   async readURL(input) {
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-      reader.onload = function(e) {
+      reader.onload = function (e) {
         document.getElementById("preview").setAttribute("src", e.target.result);
       };
       reader.readAsDataURL(input.files[0]);
@@ -81,7 +75,7 @@ class LForm extends React.Component {
       if (this.props.location) {
         await axios.put(
           `http://localhost:1337/locations/${
-            this.props.router.query.locationid
+          this.props.router.query.locationid
           }`,
           {
             Name: data.name,
@@ -112,9 +106,10 @@ class LForm extends React.Component {
             Zipcode: data.zipcode
           }
         );
+        const userAddress = await axios.get(`http://localhost:1337/users/${this.props.loggedId}`)
         const addressRes = await postNewAddress.data;
         await axios.put(`http://localhost:1337/users/${userId}`, {
-          location: [addressRes._id]
+          locations: [addressRes._id, ...userAddress.data.locations]
         });
         formData.append("files", file);
         formData.append("path", "location/images");
@@ -139,7 +134,7 @@ class LForm extends React.Component {
       data["state"] = this.props.location[0].State;
       data["zipcode"] = this.props.location[0].Zipcode;
       this.setState({ data });
-      this.setState({ file: this.props.location[0].Image.url });
+      this.setState({ file: this.props.location[0].Image !== null ? this.props.location[0].Image.url : '' });
     }
   }
   render() {
@@ -249,6 +244,8 @@ class LForm extends React.Component {
                     onChange={this.onChange.bind(this, "zipcode")}
                     type="text"
                     name="zipcode"
+                    pattern="[0-9]{5}"
+                    max="99999"
                     value={this.state.data.zipcode}
                     style={{ height: 50, fontSize: "1.2em" }}
                     required
@@ -256,7 +253,7 @@ class LForm extends React.Component {
                 </AvGroup>
                 <AvGroup>
                   <Row>
-                    {this.state.file !== null ? (
+                    {this.state.file !== null && this.state.file !== "" ? (
                       <Col>
                         <Button
                           style={{
@@ -279,17 +276,17 @@ class LForm extends React.Component {
                         />
                       </Col>
                     ) : (
-                      <Col>
-                        <Label>Image:</Label>
-                        <AvInput
-                          onChange={this.onChange.bind(this, "file")}
-                          type="file"
-                          id="file"
-                          name="file"
-                          style={{ height: 50, fontSize: "1.2em" }}
-                        />
-                      </Col>
-                    )}
+                        <Col>
+                          <Label>Image:</Label>
+                          <AvInput
+                            onChange={this.onChange.bind(this, "file")}
+                            type="file"
+                            id="file"
+                            name="file"
+                            style={{ height: 50, fontSize: "1.2em" }}
+                          />
+                        </Col>
+                      )}
                   </Row>
                 </AvGroup>
                 <AvGroup>
@@ -300,17 +297,20 @@ class LForm extends React.Component {
                     {this.state.buttonText}
                   </Button>
                 </AvGroup>
-
-                <AvGroup>
-                  <Button
-                    style={{ float: "right", width: 120 }}
-                    color="danger"
-                    onKeyPress={this.deletePost.bind(this)}
-                    onClick={this.deletePost.bind(this)}
-                  >
-                    Delete
+                {this.props.location !== undefined ? (
+                  <AvGroup>
+                    <Button
+                      style={{ float: "right", width: 120 }}
+                      color="danger"
+                      onKeyPress={this.deletePost.bind(this)}
+                      onClick={this.deletePost.bind(this)}
+                    >
+                      Delete
                   </Button>
-                </AvGroup>
+                  </AvGroup>
+                ) : (
+                    <AvGroup></AvGroup>
+                  )}
               </AvForm>
             </section>
           </Col>

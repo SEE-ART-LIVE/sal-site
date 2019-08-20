@@ -6,7 +6,7 @@ import { Col, Row, Table } from "reactstrap";
 
 class CurrentUserEventsList extends React.Component {
   async componentWillMount() {
-    console.log(this.props);
+    // console.log(this.props);
   }
 
   formatDate(date) {
@@ -38,6 +38,7 @@ class CurrentUserEventsList extends React.Component {
       data: { loading, error, users },
       search
     } = this.props;
+    console.log(users !== undefined)
     if (error)
       return (
         <div className="py-5">
@@ -49,8 +50,8 @@ class CurrentUserEventsList extends React.Component {
         </div>
       );
     if (users && users.length) {
-      let events = users[0].event;
-      // console.log(users[0].event);
+      let events = users[0].events;
+      console.log(events);
       if (events.length != 0) {
         return (
           <div className="py-5">
@@ -64,7 +65,7 @@ class CurrentUserEventsList extends React.Component {
                 <Table>
                   <thead>
                     <tr>
-                      <th>Title</th>
+                      <th>Title A</th>
                       <th>Description</th>
                       <th>Location</th>
                       <th>Date</th>
@@ -76,7 +77,7 @@ class CurrentUserEventsList extends React.Component {
                         <td>
                           <img
                             src={
-                              event.Image.url !== null
+                              event.Image !== null
                                 ? `http://localhost:1337/${event.Image.url}`
                                 : ""
                             }
@@ -91,7 +92,7 @@ class CurrentUserEventsList extends React.Component {
                         <td>
                           {event.Description !== null ? event.Description : ""}
                         </td>
-                        <td>{event.location !== null ? event.Name : ""}</td>
+                        <td>{event.location !== null ? event.location.Name : ""}</td>
                         <td>
                           {event.Date !== null
                             ? this.formatDate(event.Date)
@@ -101,10 +102,10 @@ class CurrentUserEventsList extends React.Component {
                           <Link
                             as={`/event?eventid=${event._id}&userid=${
                               this.props.loggedId
-                            }`}
+                              }`}
                             href={`/event?eventid=${event._id}&userid=${
                               this.props.loggedId
-                            }`}
+                              }`}
                           >
                             <a className="btn btn-primary">Edit</a>
                           </Link>
@@ -187,7 +188,7 @@ const query = gql`
   query users($id: ID!) {
     users(where: { _id: $id }) {
       _id
-      event {
+      events {
         _id
         Title
         Description

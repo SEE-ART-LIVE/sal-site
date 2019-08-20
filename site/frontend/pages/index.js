@@ -24,6 +24,9 @@ class Index extends React.Component {
           <Col>
             <div className="search">SEE ART LIVE 🎨</div>
           </Col>
+          <Col>
+            <div className="search">SEE ART LIVE 🎨</div>
+          </Col>
         </Row>
         <style jsx>
           {`

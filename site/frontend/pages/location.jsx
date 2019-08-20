@@ -1,6 +1,7 @@
 import React from "react";
 import defaultPage from "../hocs/defaultPage";
 import LocationForm from "../components/LocationForm";
+import Router from "next/router"
 import axios from "axios";
 
 class Location extends React.Component {

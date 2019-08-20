@@ -31,11 +31,19 @@ class Layout extends React.Component {
             name="viewport"
             content="initial-scale=1.0, width=device-width"
           />
-          <link 
-          rel="stylesheet" 
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
-          crossOrigin="anonymous"
+          <link
+            rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="stylesheet"
+            href="https://bootswatch.com/4/darkly/bootstrap.min.css"
+          />
+          <link
+            rel="stylesheet"
+            href="/static/css/react-datepicker.min.css"
           />
         </Head>
         <header>
@@ -63,23 +71,25 @@ class Layout extends React.Component {
                 </NavItem>
               </>
             ) : (
-              <>
-                <NavItem className="ml-auto">
-                  <Link href="/signin">
-                    <a className="nav-link">Sign In</a>
-                  </Link>
-                </NavItem>
+                <>
+                  <NavItem className="ml-auto">
+                    <Link href="/signin">
+                      <a className="nav-link">Sign In</a>
+                    </Link>
+                  </NavItem>
 
-                <NavItem>
-                  <Link href="/signup">
-                    <a className="nav-link"> Sign Up</a>
-                  </Link>
-                </NavItem>
-              </>
-            )}
+                  <NavItem>
+                    <Link href="/signup">
+                      <a className="nav-link"> Sign Up</a>
+                    </Link>
+                  </NavItem>
+                </>
+              )}
           </Nav>
         </header>
-        <Container><div className="py-5">{children}</div></Container>
+        <Container>
+          <div className="py-5">{children}</div>
+        </Container>
       </div>
     );
   }

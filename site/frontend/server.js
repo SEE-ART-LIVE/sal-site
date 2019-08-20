@@ -14,15 +14,6 @@ app
   .then(() => {
     const server = express();
 
-    server.get("/restaurants/:id", (req, res) => {
-      const actualPage = "/restaurants";
-      const queryParams = {
-        id: req.params.id
-      };
-      console.dir("req.params.id = " + JSON.stringify(req.params.id));
-      app.render(req, res, actualPage, queryParams);
-    });
-
     server.get("/user/:query", (req, res) => {
       return app.render(req, res, "/user", {
         query: req.params.query
