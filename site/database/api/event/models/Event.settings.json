@@ -1,0 +1,42 @@
+{
+  "connection": "default",
+  "collectionName": "event",
+  "info": {
+    "name": "event",
+    "description": "See Art Live  Event Content Type"
+  },
+  "options": {
+    "timestamps": [
+      "createdAt",
+      "updatedAt"
+    ]
+  },
+  "attributes": {
+    "Title": {
+      "default": "",
+      "type": "string"
+    },
+    "Image": {
+      "model": "file",
+      "via": "related",
+      "plugin": "upload"
+    },
+    "Date": {
+      "default": "",
+      "type": "date"
+    },
+    "Description": {
+      "default": "",
+      "type": "text"
+    },
+    "users": {
+      "collection": "user",
+      "via": "events",
+      "plugin": "users-permissions"
+    },
+    "location": {
+      "model": "location",
+      "via": "event"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "defaultConnection": "default",
+  "connections": {
+    "default": {
+      "connector": "strapi-hook-mongoose",
+      "settings": {
+        "database": "seeartlive",
+        "host": "ds259347.mlab.com",
+        "srv": false,
+        "port": "59347",
+        "username": "naeluh",
+        "password": "Drupal123!"
+      },
+      "options": {
+        "authenticationDatabase": "seeartlive"
+      }
+    }
+  }
+}
